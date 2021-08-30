@@ -10,6 +10,10 @@ const { getEdgePrices } = require('./services/prices');
  * @param {function} getOrderBook fetches the order book split by bids and asks
  */
 module.exports = (getOrderBook) => {
+    const account = new Account([
+        { currency: CURRENCY.ETH, amount: 10 },
+        { currency: CURRENCY.USD, amount: 2000 },
+    ]);
     const polling = {};
     /**
      * Start the bot and place initial orders
