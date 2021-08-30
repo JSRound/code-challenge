@@ -59,6 +59,7 @@ module.exports = (getOrderBook) => {
         const balances = Object.keys(CURRENCY).map((symbol) =>
             getBalance(symbol, account, filledOrders)
         );
+        balances.forEach(logBalance);
         return balances;
     }
 
