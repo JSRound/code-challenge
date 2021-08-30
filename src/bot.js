@@ -14,7 +14,14 @@ module.exports = (getOrderBook) => {
    * Watch for changes and fill on interval
    */
   async function start() {
-    throw new Error('Not implemented')
+    // get prices
+    const prices = await getOrderBook();
+
+    // get price ranges
+
+    // create random orders
+
+    // start polling
   }
 
   /**
