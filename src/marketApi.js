@@ -1,6 +1,10 @@
 const https = require('https');
 const http = require('http');
-const { formatPrice } = require('./services/parsing');
+const {
+    formatPrice,
+    getGroupedPrices,
+    parseGroupedPrices,
+} = require('./services/parsing');
 
 async function get(url) {
     return new Promise((resolve, reject) => {
@@ -40,10 +44,12 @@ module.exports = (baseUrl, symbol, percision) => {
     const getOrderBook = async () => {
         const prices = await get(uri);
         const formattedPrices = prices.map(formatPrice);
-        return formattedPrices;
+        const groupedPrices = getGroupedPrices(formattedPrices);
+        const parsedPrices = parseGroupedPrices(groupedPrices);
+        return parsedPrices;
     };
 
     return {
-        getOrderBook,
+        getOrderBook
     };
 };
