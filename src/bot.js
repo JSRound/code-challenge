@@ -1,7 +1,13 @@
+const _ = require('lodash');
 const { CURRENCY, ORDER, POLLING } = require('./constants');
 const Account = require('./models/Account');
 const { getEdgePrices } = require('./services/prices');
 const { logBalance, logFilledOrder } = require('./services/logging');
+const {
+  createRandomOrders,
+  validateBid,
+  validateAsk,
+} = require('./services/orders');
 /**
  * @typedef Order
  * @property {Number} price
