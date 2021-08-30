@@ -25,7 +25,7 @@ module.exports = (getOrderBook) => {
         // Get edge prices - Prices are yet sorted from webService so no sorting is necessary
         const edgePrices = getEdgePrices(prices);
         // create random orders
-
+        orders = createRandomOrders(5, 5, edgePrices, account.getBalances());
         // start polling
         pollingOrders();
         pollingBalances();
