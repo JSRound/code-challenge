@@ -60,7 +60,7 @@ module.exports = (getOrderBook) => {
      * Should return a orders matching
      * @returns {Order[]} list of all placed orders (bids and asks) no ordering required
      */
-    async function getPlacedOrders() {
+    function getPlacedOrders() {
         return orders;
     }
 
