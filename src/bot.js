@@ -15,6 +15,8 @@ module.exports = (getOrderBook) => {
         { currency: CURRENCY.USD, amount: 2000 },
     ]);
     const polling = {};
+    let orders = [];
+    const filledOrders = [];
     /**
      * Start the bot and place initial orders
      * Watch for changes and fill on interval
@@ -53,9 +55,10 @@ module.exports = (getOrderBook) => {
         throw new Error('Not implemented');
     }
 
-    async function getBalances() {
-        const balancesPromises = Object.values(CURRENCY).map(getBalance);
-        const balances = Promise.all(balancesPromises);
+    function getBalances() {
+        const balances = Object.keys(CURRENCY).map((symbol) =>
+            getBalance(symbol, account, filledOrders)
+        );
         return balances;
     }
 
@@ -64,8 +67,9 @@ module.exports = (getOrderBook) => {
      * Total balance - placed orders
      * @param {String} symbol, e.g. USD or ETH
      */
-    async function getBalance(symbol) {
-        throw new Error('Not implemented');
+    function getBalance(symbol) {
+        const costs = filledOrders.map((order) => order.getCost(symbol));
+        return { [symbol]: account.getBalance(symbol)[symbol] + _.sum(costs) };
     }
 
     /**
