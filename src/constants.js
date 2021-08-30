@@ -11,9 +11,19 @@ const POLLING = Object.freeze({
         BALANCE: 30000,
     },
 });
+const PRICE = Object.freeze({
+    AMOUNT: 'amount',
+    PRICE: 'price',
+    QUANTITY: 'quantity'
+});
+
+const ORDER = Object.freeze({
+    BID: 'bid',
+    ASK: 'ask'
+});
 
 const constants = Object.freeze({
-    CURRENCY, POLLING
+    CURRENCY, POLLING, ORDER, PRICE
 });
 
 module.exports = constants;
