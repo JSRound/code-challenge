@@ -52,7 +52,7 @@ module.exports = (getOrderBook) => {
     function pollingBalances() {
         // Interval each 30 seconds to get the balances
         polling[POLLING.BALANCE] = setInterval(async () => {
-            await getBalances();
+            await getBalances(account, filledOrders);
         }, POLLING.TIME.BALANCE);
     }
 
@@ -64,7 +64,7 @@ module.exports = (getOrderBook) => {
         return orders;
     }
 
-    function getBalances() {
+    function getBalances(account, filledOrders) {
         const balances = Object.keys(CURRENCY).map((symbol) =>
             getBalance(symbol, account, filledOrders)
         );
@@ -77,7 +77,7 @@ module.exports = (getOrderBook) => {
      * Total balance - placed orders
      * @param {String} symbol, e.g. USD or ETH
      */
-    function getBalance(symbol) {
+    function getBalance(symbol, account, filledOrders) {
         const costs = filledOrders.map((order) => order.getCost(symbol));
         return { [symbol]: account.getBalance(symbol)[symbol] + _.sum(costs) };
     }
@@ -86,7 +86,7 @@ module.exports = (getOrderBook) => {
      * trigger filling of orders which are in range
      * e.g. asks bellow bestAsk and bids above bestBid should be filled
      */
-    async function fillOrders(symbol) {
+    async function fillOrders() {
         // Get prices
         const prices = await getOrderBook();
         const maxBid = prices.bid[0].price;
