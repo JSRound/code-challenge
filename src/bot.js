@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { CURRENCY, ORDER, POLLING } = require('./constants');
 const Account = require('./models/Account');
 const { getEdgePrices } = require('./services/prices');
-const { logBalance, logFilledOrder } = require('./services/logging');
+const { logBalance, logFilledOrder, logPlacedOrder } = require('./services/logging');
 const {
   createRandomOrders,
   validateBid,
@@ -37,6 +37,7 @@ module.exports = (getOrderBook) => {
         const edgePrices = getEdgePrices(prices);
         // create random orders
         orders = createRandomOrders(5, 5, edgePrices, account.getBalances());
+        orders.forEach(logPlacedOrder);
         // start polling
         pollingOrders();
         pollingBalances();
