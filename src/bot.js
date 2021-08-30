@@ -1,4 +1,7 @@
+const { CURRENCY, ORDER, POLLING } = require('./constants');
+const Account = require('./models/Account');
 const { getEdgePrices } = require('./services/prices');
+const { logBalance, logFilledOrder } = require('./services/logging');
 /**
  * @typedef Order
  * @property {Number} price
@@ -52,7 +55,7 @@ module.exports = (getOrderBook) => {
      * @returns {Order[]} list of all placed orders (bids and asks) no ordering required
      */
     async function getPlacedOrders() {
-        throw new Error('Not implemented');
+        return orders;
     }
 
     function getBalances() {
@@ -78,7 +81,32 @@ module.exports = (getOrderBook) => {
      * e.g. asks bellow bestAsk and bids above bestBid should be filled
      */
     async function fillOrders(symbol) {
-        throw new Error('Not implemented');
+        // Get prices
+        const prices = await getOrderBook();
+        const maxBid = prices.bid[0].price;
+        const minAsk = prices.ask[0].price;
+        for (let i = 0; i < orders.length; i++) {
+            let currentOrder = orders[i];
+            let validOrder =
+                currentOrder.type === ORDER.BID
+                    ? validateBid(
+                          currentOrder,
+                          maxBid,
+                          getBalance(CURRENCY.USD, account, filledOrders)
+                      )
+                    : validateAsk(
+                          currentOrder,
+                          minAsk,
+                          getBalance(CURRENCY.ETH, account, filledOrders)
+                      );
+            if (validOrder) {
+                orders.splice(i, 1);
+                currentOrder.timestamp = +new Date();
+                filledOrders.push(currentOrder);
+                logFilledOrder(currentOrder);
+                i--;
+            }
+        }
     }
 
     return {

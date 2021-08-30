@@ -26,8 +26,22 @@ function createRandomOrders(nBids, nAsks, edgePrices, balances) {
     return _.shuffle([...bids, ...asks]);
 }
 
+function validateBid(order, maxBid, balance) {
+    const priceOk = order.price > maxBid;
+    const balanceOk = balance[CURRENCY.USD] - order.price * order.amount > 0;
+    return priceOk && balanceOk;
+}
+
+function validateAsk(order, minAsk, balance) {
+    const priceOk = order.price < minAsk;
+    const balanceOk = balance[CURRENCY.ETH] - order.amount > 0;
+    return priceOk && balanceOk;
+}
+
 module.exports = {
     createRandomOrders,
     createRandomBid,
-    createRandomAsk
+    createRandomAsk,
+    validateBid,
+    validateAsk
 };

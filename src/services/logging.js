@@ -4,9 +4,23 @@ const formatBalance = (balance) => {
 };
 const logBalance = (arg) => console.log(formatBalance(arg));
 
+function logFilledBid(order) {
+    console.log(`FILLED BID @ ${order.price} ${order.amount} (ETH + ${order.amount} USD - ${order.price * order.amount})`);
+}
+function logFilledAsk(order) {
+    console.log(`FILLED ASK @ ${order.price} ${order.amount} (ETH - ${order.amount} USD + ${order.price * order.amount})`);
+}
+const logFilledOrder = (order) => {
+    if (order.type === 'bid') {
+        logFilledBid(order);
+    } else {
+        logFilledAsk(order);
+    }
+};
 
 
 module.exports = {
     logBalance,
-    formatBalance
+    formatBalance,
+    logFilledOrder
 };
