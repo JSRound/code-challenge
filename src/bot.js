@@ -1,3 +1,4 @@
+const { getEdgePrices } = require('./services/prices');
 /**
  * @typedef Order
  * @property {Number} price
@@ -17,9 +18,8 @@ module.exports = (getOrderBook) => {
     async function start() {
         // get prices
         const prices = await getOrderBook();
-
-        // get price ranges
-
+        // Get edge prices - Prices are yet sorted from webService so no sorting is necessary
+        const edgePrices = getEdgePrices(prices);
         // create random orders
 
         // start polling
